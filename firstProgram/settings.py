@@ -26,7 +26,11 @@ SECRET_KEY = "django-insecure-5@b723i_^ea56m9#v^nm@yt9((yzmq(q@%d1ltbb1b&7tz$ewy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "stockpredict.onrender.com",
+    "localhost", 
+    "127.0.0.1",
+]
 
 
 # Application definition
