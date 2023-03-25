@@ -1,3 +1,4 @@
+beautifulsoup4==4.11.1
 Django==3.2.18
 django-cors-headers==3.13.0
 gunicorn==20.1.0
