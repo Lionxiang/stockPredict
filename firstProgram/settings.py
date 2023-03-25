@@ -82,7 +82,7 @@ ROOT_URLCONF = "firstProgram.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'dist')],
+        "DIRS": [os.path.join(BASE_DIR, 'appfront/dist')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
