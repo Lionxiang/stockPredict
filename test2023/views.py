@@ -33,10 +33,10 @@ import pandas as pd
 @require_http_methods(["GET"])
 def stock_predict(request):
     result_lists = [] #產製報表結果
-    stock_code_array = ['9911', '2382', '2884', '2886', '2330','4104','9939','3029','2471','2453','5439']
+    # stock_code_array = ['9911', '2382', '2884', '2886', '2330','4104','9939','3029','2471','2453','5439']
     stockArrStr = request.GET.get('stockCode')
     print('stockArrStr=='+str(stockArrStr))
-    # stock_code_array = stockArrStr.split(',')
+    stock_code_array = stockArrStr.split(',')
     print('stock_code_array=='+str(stock_code_array))
 
     parameter_array = ['每股淨值(F)(TSE公告數)','ROE(A)-稅後', 'ROE(A)─稅後','最低本益比','最高本益比']
