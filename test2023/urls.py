@@ -19,9 +19,9 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    re_path(r'index$', views.index),
-    re_path(r'add_book$', views.add_book),
-    re_path(r'show_books$', views.show_books),
+    # path('', views.index, name='index'),
+    # re_path(r'index$', views.index),
+    # re_path(r'add_book$', views.add_book),
+    # re_path(r'show_books$', views.show_books),
     re_path(r'stock_predict$', views.stock_predict)
 ]

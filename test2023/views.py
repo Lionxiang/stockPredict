@@ -8,7 +8,7 @@ from django.core import serializers
 import requests
 import json
 
-# from .models import Book
+from .models import Book
 
 #for stock_predict
 from bs4 import BeautifulSoup
@@ -16,26 +16,28 @@ import pandas as pd
 #import utility as util
 
 # @require_http_methods(["GET"])
-def index(request):
-    response = {}
-    try:
-        stockArrStr = request.GET.get('param')
-        stock_code_array = stockArrStr.split(',')
-        response['result']  = stock_code_array
-        response['msg'] = 'success'
-        response['error_num'] = 0
-    except  Exception as e:
-        response['msg'] = str(e)
-        response['error_num'] = 1
+# def index(request):
+#     response = {}
+#     try:
+#         stockArrStr = request.GET.get('param')
+#         stock_code_array = stockArrStr.split(',')
+#         response['result']  = stock_code_array
+#         response['msg'] = 'success'
+#         response['error_num'] = 0
+#     except  Exception as e:
+#         response['msg'] = str(e)
+#         response['error_num'] = 1
 
-    return JsonResponse(response)    
+#     return JsonResponse(response)    
 
 @require_http_methods(["GET"])
 def stock_predict(request):
     result_lists = [] #產製報表結果
-    # stock_code_array = ['9911', '2382', '2884', '2886', '2330','4104','9939','3029','2471','2453','5439']
+    stock_code_array = ['9911', '2382', '2884', '2886', '2330','4104','9939','3029','2471','2453','5439']
     stockArrStr = request.GET.get('stockCode')
-    stock_code_array = stockArrStr.split(',')
+    print('stockArrStr=='+str(stockArrStr))
+    # stock_code_array = stockArrStr.split(',')
+    print('stock_code_array=='+str(stock_code_array))
 
     parameter_array = ['每股淨值(F)(TSE公告數)','ROE(A)-稅後', 'ROE(A)─稅後','最低本益比','最高本益比']
     for i in stock_code_array:
@@ -43,6 +45,7 @@ def stock_predict(request):
     #for i in range(0, 9999) :
         # stock_code = str(i).zfill(4)
         try:
+            print('i==' + i + ' ,stock_code==' + str(stock_code))
             lists = [] #過程驗證數據(含公式內使用參數的明細<8年內>)
             ## 各項數據獲取
             url = "https://jdata.yuanta.com.tw/z/zc/zcr/zcra/zcra_" + stock_code + ".djhtm"
@@ -57,6 +60,7 @@ def stock_predict(request):
             # dataRow = [7,12,26] # 7:年、12:ROE(稅後)、26:每股淨值
             dataRow = range(7, 35)
             title = []
+            print('flag1')
             for i in dataRow:
                 mini_list = []
                 for j in soup.select("div")[i].text.split('\n')[1:]: #只取我要的部分就好
@@ -67,6 +71,7 @@ def stock_predict(request):
                     lists.append(mini_list)         
                 if i == 7 :
                     title.append(mini_list)
+            print('flag2')
                 
             #找到我要的指標from 下述網址   
             url = "https://jdata.yuanta.com.tw/z/zc/zca/zca_" + stock_code + ".djhtm"  
@@ -84,6 +89,7 @@ def stock_predict(request):
                         mini_list.append(j)  
                 lists.append(mini_list)    
             
+            print('flag3')
             # title[0][0] = company    
             # df = pd.DataFrame(lists, columns=title[0])
             # df = df.astype(str)
@@ -99,6 +105,7 @@ def stock_predict(request):
             reason_price = round(cal_Stock_reason_price(est_ROE, NAV, reason_PE, reasonP), 2) #合理價
             disaster_price = round(cal_Stock_reason_price(est_ROE, NAV, reason_PE, low_P), 2) #股災價
             
+            print('flag4')
             result_list = []
             result_list.append(company) #公司名稱及代號
             result_list.append(stock_price_now) #最新股價
@@ -120,11 +127,13 @@ def stock_predict(request):
             result_list.append(disaster_price >= float(stock_price_now))
             
             result_lists.append(result_list)
+            print('flag5')
         except:
             print('報錯代碼:' + stock_code)
 
     response = {}
     try:
+        print('result_lists==' + str(result_lists))
         response['list']  = result_lists
         response['msg'] = 'success'
         response['error_num'] = 0
@@ -145,30 +154,30 @@ def cal_Stock_reason_price(est_ROE, NAV, reason_PE, percent) :
     return (float(est_ROE) * 0.01) * float(NAV) * (float(reason_PE) * percent)
 
 
-@require_http_methods(["GET"])
-def add_book(request):
-    response = {}
-    try:
-        book = Book(book_name=request.GET.get('book_name')) 
-        book.save()
-        response['msg'] = 'success'
-        response['error_num'] = 0
-    except Exception as e:
-        response['msg'] = str(e) 
-        response['error_num'] = 1
+# @require_http_methods(["GET"])
+# def add_book(request):
+#     response = {}
+#     try:
+#         book = Book(book_name=request.GET.get('book_name')) 
+#         book.save()
+#         response['msg'] = 'success'
+#         response['error_num'] = 0
+#     except Exception as e:
+#         response['msg'] = str(e) 
+#         response['error_num'] = 1
 
-    return JsonResponse(response)       
+#     return JsonResponse(response)       
 
-@require_http_methods(["GET"])
-def show_books(request):
-    response = {}
-    try:
-        books = Book.objects.filter()
-        response['list']  = json.loads(serializers.serialize("json", books))
-        response['msg'] = 'success'
-        response['error_num'] = 0
-    except  Exception as e:
-        response['msg'] = str(e)
-        response['error_num'] = 1
+# @require_http_methods(["GET"])
+# def show_books(request):
+#     response = {}
+#     try:
+#         books = Book.objects.filter()
+#         response['list']  = json.loads(serializers.serialize("json", books))
+#         response['msg'] = 'success'
+#         response['error_num'] = 0
+#     except  Exception as e:
+#         response['msg'] = str(e)
+#         response['error_num'] = 1
 
-    return JsonResponse(response)    
+#     return JsonResponse(response)    
