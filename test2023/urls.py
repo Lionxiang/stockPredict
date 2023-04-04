@@ -23,5 +23,6 @@ urlpatterns = [
     # re_path(r'index$', views.index),
     # re_path(r'add_book$', views.add_book),
     # re_path(r'show_books$', views.show_books),
-    re_path(r'stock_predict$', views.stock_predict)
+    re_path(r'stock_predict$', views.stock_predict),
+    re_path(r'stockSelectList$', views.stockSelectList),
 ]

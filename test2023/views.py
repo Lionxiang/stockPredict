@@ -8,27 +8,28 @@ from django.core import serializers
 import requests
 import json
 
-from .models import Book
+from .models import stockList
 
 #for stock_predict
 from bs4 import BeautifulSoup
 import pandas as pd
 #import utility as util
 
-# @require_http_methods(["GET"])
-# def index(request):
-#     response = {}
-#     try:
-#         stockArrStr = request.GET.get('param')
-#         stock_code_array = stockArrStr.split(',')
-#         response['result']  = stock_code_array
-#         response['msg'] = 'success'
-#         response['error_num'] = 0
-#     except  Exception as e:
-#         response['msg'] = str(e)
-#         response['error_num'] = 1
+@require_http_methods(["GET"])
+def stockSelectList(request):
+    dataSet = stockList.objects.all()
+    print('123')
+    response = {}
+    try:
+        response['msg'] = 'success'
+        response['error_num'] = 0
+        response['result'] = json.loads(serializers.serialize("json", dataSet))
+    except  Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
 
-#     return JsonResponse(response)    
+    return JsonResponse(response)
+
 
 @require_http_methods(["GET"])
 def stock_predict(request):
@@ -152,32 +153,3 @@ def cal_Stock_reason_price(est_ROE, NAV, reason_PE, percent) :
     # percent，因預估目前，但這些數據皆是過去的，理論上正常公司會越來越好，
     # 所以縱使是股災價的預估本益比也應該比過去好
     return (float(est_ROE) * 0.01) * float(NAV) * (float(reason_PE) * percent)
-
-
-# @require_http_methods(["GET"])
-# def add_book(request):
-#     response = {}
-#     try:
-#         book = Book(book_name=request.GET.get('book_name')) 
-#         book.save()
-#         response['msg'] = 'success'
-#         response['error_num'] = 0
-#     except Exception as e:
-#         response['msg'] = str(e) 
-#         response['error_num'] = 1
-
-#     return JsonResponse(response)       
-
-# @require_http_methods(["GET"])
-# def show_books(request):
-#     response = {}
-#     try:
-#         books = Book.objects.filter()
-#         response['list']  = json.loads(serializers.serialize("json", books))
-#         response['msg'] = 'success'
-#         response['error_num'] = 0
-#     except  Exception as e:
-#         response['msg'] = str(e)
-#         response['error_num'] = 1
-
-#     return JsonResponse(response)    

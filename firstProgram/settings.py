@@ -44,7 +44,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "test2023",
     'corsheaders',  #新增app
+    'import_export'
+    # 'stockSelectList'
 ]
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True #匯出匯入功能
 
 # MIDDLEWARE_CLASSES = [
 #     'corsheaders.middleware.CorsMiddleware',
@@ -96,7 +100,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "firstProgram.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
